@@ -1,11 +1,12 @@
 import cv2
 import time
-
+from datetime import datetime
 camera = cv2.VideoCapture(0)
 
 prev_frame_time =time.time()
 
 detect = True
+blur = False
 
 if not camera.isOpened():
     print("Cannot open camera")
@@ -23,12 +24,20 @@ while True:
     frame = cv2.flip(frame,1)
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     
-    cv2.putText(frame,"D: Toggle Detection | S: Screenshot | Q: Quit",(150,470),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,255,255),2)
+    cv2.putText(frame,"D: Toggle Detection | S: Screenshot | B: Blur | Q: Quit",(120,470),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,255,255),2)
     
     if detect:
         face = face_cascade.detectMultiScale(gray,scaleFactor=1.1,minNeighbors=8)
+        
         for(x,y,w,h) in face:
-            cv2.rectangle(frame,(x,y),(x+w,y+h),(127,0,255),2)
+            if blur:
+                face_image = frame[y:y+h,x:x+w]
+                blurred = cv2.blur(face_image,(25,25))
+                frame[y:y+h,x:x+w]=blurred
+                
+            else: 
+                cv2.rectangle(frame,(x,y),(x+w,y+h),(127,0,255),2)
+
     
         cv2.putText(frame,f"Faces detected: {len(face)}",(20,40),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
     
@@ -57,9 +66,13 @@ while True:
     if key == ord('q'):
         break
     elif key == ord('s'):
-        cv2.imwrite("screenshot.png",frame)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename= f"screenshot_{timestamp}.png"
+        cv2.imwrite(filename,frame)
     elif key ==ord('d'):
         detect= not detect
+    elif key ==ord('b'):
+        blur = not blur
     
 camera.release()
 cv2.destroyAllWindows()
