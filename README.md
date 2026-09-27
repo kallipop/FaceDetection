@@ -12,7 +12,10 @@ The program uses the computer's webcam to detect faces in real time and highligh
 - Custom pink bounding boxes
 - Real-time face counter
 - Face detection status
-- Screenshot capture with the S key
+- Real-time FPS counter
+- Toggle face detection with the D key
+- Privacy blur mode with the B key
+- Screenshot capture with timestamps the S key
 - Exit with the Q key
 
 ## Technologies
@@ -27,6 +30,8 @@ The program uses the computer's webcam to detect faces in real time and highligh
 
 ## Controls
 - Q - Close the application
+- D - Toggle face detection
+- B - Toggle privacy blur mode
 - S - Take a screenshot
 
-  Screenshots are saved as screenshot.png in the project folder
+  Screenshots are saved with a timestamp in the project folder
